@@ -174,6 +174,17 @@ class HttpSecurityTests(unittest.TestCase):
         status,body=self.request('GET','/api/state',h)
         self.assertEqual(status,200);self.assertNotIn(b'secret',body)
 
+    def test_cathay_endpoint_requires_auth_and_isolates_fixtures(self):
+        self.assertEqual(self.request('GET','/api/cathay')[0],401)
+        h={'Authorization':'Bearer offline-test-token'}
+        status,body=self.request('GET','/api/cathay',h)
+        self.assertEqual(status,200)
+        self.assertEqual({'sources':[],'fixture':True},json.loads(body))
+        self.server.cathay.state=Mock(side_effect=RuntimeError('private diagnostic'))
+        status,body=self.request('GET','/api/cathay',h)
+        self.assertEqual(status,503)
+        self.assertNotIn(b'private diagnostic',body)
+
     def test_origin_and_host_are_checked_before_mutation(self):
         h={'Authorization':'Bearer offline-test-token','Content-Type':'application/json',
            'Origin':'https://example.com'}

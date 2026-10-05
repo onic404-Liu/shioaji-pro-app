@@ -6,7 +6,7 @@ const money = (v, digits=2) => v == null || !Number.isFinite(Number(v)) ? '—' 
 const signed = v => v == null ? '—' : (Number(v)>0?'+':'') + money(v);
 const tone = v => Number(v)>0?'up':Number(v)<0?'down':'';
 const timeText = v => v ? new Date(v*1000).toLocaleTimeString('zh-TW',{hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'}) : '—';
-const titles={overview:['庫存工作台','正式持倉、行情與 B15 追蹤。'],watch:['關注清單','把值得觀察的標的，留在你的視線裡。'],orders:['模擬委託','先確認內容，再送出每一筆委託。'],alerts:['價格提醒','訂好門檻，照自己的計畫追蹤。'],settings:['連線與金鑰','金鑰留在本機，帳務來源清楚可見。']};
+const titles={cathay:['國泰未實現損益','台股與複委託的本機檔案快照，依來源及幣別呈現。'],overview:['庫存工作台','正式持倉、行情與 B15 追蹤。'],watch:['關注清單','把值得觀察的標的，留在你的視線裡。'],orders:['模擬委託','先確認內容，再送出每一筆委託。'],alerts:['價格提醒','訂好門檻，照自己的計畫追蹤。'],settings:['連線與金鑰','金鑰留在本機，帳務來源清楚可見。']};
 const statuses={PendingSubmit:'傳送中',PreSubmitted:'預約中',Submitted:'已受理',Filled:'全部成交',PartFilled:'部分成交',Failed:'委託失敗',Cancelled:'已取消',Unknown:'結果未知'};
 let page='overview', state=null, liveState=null, demo=false, busy=false, preview=null, seen=new Set(), initial=true, pollBusy=false, stopped=false;
 let toastTimer, lastError='', sessionReady=false, selectedCode='', renderedContext='';
@@ -41,7 +41,7 @@ async function act(route,data={},message){
 async function load(){
  if(pollBusy||busy||stopped)return;
  pollBusy=true;
- try{liveState=await request('state');const recovered=!sessionReady;sessionReady=true;if(recovered)loginStatus('本機服務已就緒。請輸入金鑰連線。');if(!demo){state=liveState;render();notifyEvents(state.events);}}
+ try{liveState=await request('state');const recovered=!sessionReady;sessionReady=true;if(recovered)loginStatus('本機服務已就緒。請輸入金鑰連線。');if(!demo){state=liveState;render();notifyEvents(state.events);loadCathay();}}
  catch(error){banner(error.message,true);if(!sessionReady)loginStatus('本機服務尚未就緒或連線已失效。請關閉舊投資簿分頁與服務視窗，再雙擊「啟動投資簿.cmd」。',true);}
  finally{pollBusy=false;}
 }
@@ -97,6 +97,7 @@ function render(){
  $('#order-warning').textContent=canTrade?'目前帳戶：'+state.accounts[state.account_index]+'。僅可送出模擬單。':connected&&!demo?'目前是正式查詢環境。請切換模擬測試金鑰後下單。':'請使用模擬測試金鑰連線，才能建立委託。';
  $('#refresh').disabled=!connected||demo||busy;$('#refresh-quotes').disabled=!connected||demo||busy;
  for(const p of ['simulation','readonly']){$('#vault-'+p).textContent=state.saved[p]?'已保存 · Windows 保護':'未保存';$(`[data-delete-key="${p}"]`).disabled=!state.saved[p]||demo;}
+ renderCathay();
  renderTerminal(true);
  profileFields();
 }
@@ -149,3 +150,18 @@ $('#shutdown').addEventListener('click',async()=>{if(demo){toast('請先退出�
 setInterval(()=>{$('#clock').textContent=new Date().toLocaleDateString('zh-TW',{month:'long',day:'numeric',weekday:'short'});},1000);
 setInterval(load,2500);
 load();
+
+let cathayReport={sources:[]},cathayBusy=false,cathayError='';
+function cathayDate(value){return value?new Date(value*1000).toLocaleString('zh-TW',{hour12:false}):'—';}
+function reportSources(){if(demo)return [{kind:'tw',label:'國泰台股',file:'虛構台股示範',modified_at:null,rows:[{name:'示範標的 A',currency:'TWD',quantity:1000,average:40,price:42,cost:40000,market_value:42000,pnl:2000,return_pct:5}],totals:[{currency:'TWD',pnl:2000,count:1}]},{kind:'overseas',label:'國泰複委託',file:'虛構複委託示範',modified_at:null,rows:[{name:'DEMO 示例標的',market:'示範市場',currency:'USD',quantity:10,average:100,price:105,cost:1000,market_value:1050,pnl:50,return_pct:5}],totals:[{currency:'USD',pnl:50,count:1}]}];return cathayReport.sources||[];}
+function renderCathay(){
+ const sources=reportSources(),filter=$('#cathay-filter').value,search=$('#cathay-search').value.trim().toLowerCase();
+ const failed=!!cathayError||sources.some(s=>s.error);
+ $('#cathay-summary-values').innerHTML=(sources.flatMap(s=>s.totals.map(t=>`<strong class="${tone(t.pnl)}">${s.kind==='tw'?'台股':'複委託'} ${esc(t.currency)} ${signed(t.pnl)}${s.stale||cathayError?' · 上次結果':''}</strong>`)).join('')||'<strong>—</strong>')+`<small class="${failed?'report-error':''}">${demo?'虛構示範':failed?'重新讀取失敗':'檔案快照 · 非即時'}</small>`;
+ $('#cathay-sources').innerHTML=sources.map(s=>`<div class="file-source"><h2>${esc(s.label)}</h2><p>${esc(s.file)} · ${s.rows.length} 筆${s.stale||cathayError?' · 保留上次成功資料':''}</p><p>${demo?'虛構示範':`基準日未提供 · 檔案修改 ${cathayDate(s.modified_at)}`}</p><div>${s.totals.map(t=>`<span>${esc(t.currency)} <strong class="${tone(t.pnl)}">${signed(t.pnl)}</strong></span>`).join('')||'<span>尚無損益合計</span>'}</div>${s.error||cathayError?`<p class="report-error">${esc(s.error||'重新讀取失敗；以上為上次成功資料。')}</p>`:''}</div>`).join('');
+ const errors=sources.filter(s=>s.error);$('#cathay-report-status').textContent=demo?'虛構檔案示範；不讀取個人資料。':cathayError||errors.map(s=>s.label+'：'+s.error).join(' ')||'檔案資料已讀取；各幣別分開合計。';
+ const rows=sources.flatMap(s=>(filter==='all'||filter===s.kind?s.rows:[]).filter(r=>!search||r.name.toLowerCase().includes(search)).map(r=>({...r,label:s.label})));
+ $('#cathay-body').innerHTML=rows.map(r=>`<tr><td>${esc(r.label)}<small>${esc(r.market||'')}</small></td><td>${esc(r.name)}</td><td>${esc(r.currency)}</td><td>${money(r.quantity,4)}</td><td>${money(r.average,4)}</td><td>${money(r.price,4)}</td><td>${money(r.cost)}</td><td>${money(r.market_value)}</td><td class="${tone(r.pnl)}">${signed(r.pnl)}</td><td class="${tone(r.return_pct)}">${r.return_pct==null?'—':signed(r.return_pct)+'%'}</td></tr>`).join('');$('#cathay-empty').hidden=rows.length>0;$('#refresh-cathay').disabled=cathayBusy||demo||!sessionReady;
+}
+async function loadCathay(){if(cathayBusy||demo||!sessionReady)return;cathayBusy=true;try{cathayReport=await request('cathay');cathayError='';}catch(e){cathayError='檔案功能無法讀取。若剛更新程式，請重新啟動投資簿；已有數值保留為上次讀取結果。';}finally{cathayBusy=false;renderCathay();}}
+$('#refresh-cathay').addEventListener('click',loadCathay);$('#cathay-filter').addEventListener('change',renderCathay);$('#cathay-search').addEventListener('input',renderCathay);

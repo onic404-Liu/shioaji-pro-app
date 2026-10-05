@@ -11,6 +11,7 @@ FILES = (
     'test_web.py', 'test_inventory_v1.py', 'INVENTORY_V1.md',
     'backup_source.py', 'README_INVENTORY.md',
     'README.md', 'PRODUCT.md', 'DESIGN.md', 'CLEANUP.md',
+    'cathay_files.py', 'test_cathay_files.py', 'CATHAY_REPORT.md',
 )
 
 

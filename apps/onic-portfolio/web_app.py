@@ -8,6 +8,7 @@ import secrets
 import threading
 import webbrowser
 from trading_service import Workspace, InputError
+from cathay_files import CathayReader
 
 BASE = Path(__file__).parent
 
@@ -17,6 +18,7 @@ class Server(ThreadingHTTPServer):
 
     def __init__(self, address, workspace=None, token=None):
         self.workspace = workspace or Workspace(inventory_only=True)
+        self.cathay = CathayReader(enabled=workspace is None)
         self.token = token or secrets.token_urlsafe(32)
         super().__init__(address, Handler)
         self.origin = f'http://127.0.0.1:{self.server_port}'
@@ -52,6 +54,14 @@ class Handler(BaseHTTPRequestHandler):
         return True
 
     def do_GET(self):
+        if self.path == '/api/cathay':
+            if self.authorized():
+                try:
+                    with self.server.workspace.lock:
+                        self.reply(200, self.server.cathay.state())
+                except Exception:
+                    self.reply(503, {'error': '國泰檔案讀取服務暫時無法回覆。'})
+            return
         if self.path == '/api/state':
             if self.authorized():
                 try:
