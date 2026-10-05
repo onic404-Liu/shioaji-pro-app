@@ -22,7 +22,7 @@
 
 ## GitHub 備份
 
-目標 onic404-Liu/shioaji-pro-app，分支 onic-portfolio-v1，目錄 apps/onic-portfolio。以明確程式檔案清單備份，不包含 data、日誌、憑證、金鑰、庫存與帳戶資料。後續變更沿用此分支並核對提交。
+目標 onic404-Liu/shioaji-pro-app，目錄 apps/onic-portfolio。第一版分支 onic-portfolio-v1 已合併至 main。以明確程式檔案清單備份，不包含 data、日誌、憑證、金鑰、庫存與帳戶資料。後續維護提交依當次授權同步，核對遠端版本。
 
 ## 本次設計對照與驗證界線（2026-10-05）
 

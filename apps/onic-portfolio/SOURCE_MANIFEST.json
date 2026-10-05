@@ -14,8 +14,12 @@
     "apps/onic-portfolio/web/app.js": "1c6b8c59ada5f1c1c1fbfee6dca714d61077f8db68ae34e1d62aa360b2d4aa34",
     "apps/onic-portfolio/test_web.py": "10f438019c8f04f83bb09523311f030055d4966496ced34d8136fa508a852dac",
     "apps/onic-portfolio/test_inventory_v1.py": "0eb7e1edfd37716257b0fb719a2e48413cfc9b0a14f018ec9393f4e51ee29544",
-    "apps/onic-portfolio/INVENTORY_V1.md": "54e52563785a786c30304fe5edf6d4466edecb61d7f5af343b934f354709b397",
-    "apps/onic-portfolio/backup_source.py": "37c7734b0477f79aa49dd6b7390a432a3c0d1c4c0eebff7f976c4f8c5866f7bf",
-    "apps/onic-portfolio/README_INVENTORY.md": "9273899f10b77cf7fc0921aad97c8de59fab083a17eb5ebbaf3ea0fe741c21eb"
+    "apps/onic-portfolio/INVENTORY_V1.md": "738742e9428deb01044ed96727a79edd69c8493d8718cfc947c74e8ab6abe5f3",
+    "apps/onic-portfolio/backup_source.py": "c07ebeaea97c4c2dca073f9d5f38a1383b4ddc622550e335878df40c9acb68c9",
+    "apps/onic-portfolio/README_INVENTORY.md": "9273899f10b77cf7fc0921aad97c8de59fab083a17eb5ebbaf3ea0fe741c21eb",
+    "apps/onic-portfolio/README.md": "f550c32e88fdfabc0e2c1e65dae9175bbb4736a55bd3ab904bc6bea1cb2dc6d5",
+    "apps/onic-portfolio/PRODUCT.md": "1ecb78bf9fca973522794bf974ecd8ef75227ffa45effb9e8d16ebef8a504091",
+    "apps/onic-portfolio/DESIGN.md": "e49236b05d91147daa6acc61d9f22e6a577890abfaf351ca1d845ad4b4805510",
+    "apps/onic-portfolio/CLEANUP.md": "79646dad988d8a213feed6298c924b25706d5b1645d8e6fc47e21215e4e934ec"
   }
 }

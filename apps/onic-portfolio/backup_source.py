@@ -10,6 +10,7 @@ FILES = (
     '啟動投資簿.cmd', 'web/index.html', 'web/app.css', 'web/app.js',
     'test_web.py', 'test_inventory_v1.py', 'INVENTORY_V1.md',
     'backup_source.py', 'README_INVENTORY.md',
+    'README.md', 'PRODUCT.md', 'DESIGN.md', 'CLEANUP.md',
 )
 
 
