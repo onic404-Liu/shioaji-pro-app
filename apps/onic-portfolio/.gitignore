@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+data/
+*.log
+.env
+.env.*
+*.sqlite*
+*.db
+github-backup/
+*.pem
+*.key
+*.p12
+*.pfx
