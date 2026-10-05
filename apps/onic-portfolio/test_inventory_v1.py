@@ -3,10 +3,17 @@ from pathlib import Path
 import os
 import unittest
 from test_web import WorkspaceTests, MemoryVault
-from trading_service import Workspace, InputError
+from trading_service import Workspace, InputError, code
 
 
 class InventoryTests(WorkspaceTests):
+    def test_etf_letter_codes_are_valid_for_inventory_quotes(self):
+        for symbol in ('00719B', '00981A', '00981a', '009816', '8299'):
+            self.assertEqual(symbol.upper(), code(symbol))
+        for symbol in ('../file', '2890<script>', 'ABCDEF', '1234567'):
+            with self.assertRaises(InputError):
+                code(symbol)
+
     def test_inventory_mode_rejects_simulation_before_login(self):
         self.workspace.disconnect()
         self.workspace.inventory_only = True

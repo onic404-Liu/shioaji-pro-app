@@ -2,7 +2,7 @@
   "version": 1,
   "sha256_utf8": {
     "apps/onic-portfolio/.gitignore": "ed12e88ad2a4eba596b370befb4e168f3ef56cc25bd15684cec206915a512429",
-    "apps/onic-portfolio/trading_service.py": "17fc1df09b93892b6d755e7e6830422a4b89b1225a6ea6ad46aff134e8037006",
+    "apps/onic-portfolio/trading_service.py": "36a9faba381bdec56fd5170e344bebf523ae08aa2fb375c02e44b19b1f452a33",
     "apps/onic-portfolio/web_app.py": "8f451affe9193ffc92bec94c441e658b17ac3e6a13c54d3d12600f187446d5e3",
     "apps/onic-portfolio/service.py": "19ef32ff7880582559ee7bccb258a139b59f64b1ea496738a70a303fa0bfa2e2",
     "apps/onic-portfolio/credential_store.py": "0f16a0eac3f5e26abe6927a5c786d7a93079bf1f82caa063d07a4ffb38b2d437",
@@ -13,8 +13,8 @@
     "apps/onic-portfolio/web/app.css": "2696432351da30b66caf93c79f56501436998d75415ffbf6a2612038eccb3c28",
     "apps/onic-portfolio/web/app.js": "1c6b8c59ada5f1c1c1fbfee6dca714d61077f8db68ae34e1d62aa360b2d4aa34",
     "apps/onic-portfolio/test_web.py": "10f438019c8f04f83bb09523311f030055d4966496ced34d8136fa508a852dac",
-    "apps/onic-portfolio/test_inventory_v1.py": "e37442885a1d724d54ff3aadcc6f6533a68924dffa764acfd234bb77d53bdf35",
-    "apps/onic-portfolio/INVENTORY_V1.md": "4b6a91f129cb532ff80bf41de4811c0fe499d621eab6579748955c0878eb1275",
+    "apps/onic-portfolio/test_inventory_v1.py": "0eb7e1edfd37716257b0fb719a2e48413cfc9b0a14f018ec9393f4e51ee29544",
+    "apps/onic-portfolio/INVENTORY_V1.md": "54e52563785a786c30304fe5edf6d4466edecb61d7f5af343b934f354709b397",
     "apps/onic-portfolio/backup_source.py": "37c7734b0477f79aa49dd6b7390a432a3c0d1c4c0eebff7f976c4f8c5866f7bf",
     "apps/onic-portfolio/README_INVENTORY.md": "9273899f10b77cf7fc0921aad97c8de59fab083a17eb5ebbaf3ea0fe741c21eb"
   }

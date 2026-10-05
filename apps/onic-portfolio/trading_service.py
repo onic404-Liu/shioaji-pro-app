@@ -27,9 +27,9 @@ def number(value, positive=False):
 
 
 def code(value):
-    value = str(value).strip()
-    if not re.fullmatch(r'[0-9]{4,6}', value):
-        raise InputError('請輸入 4–6 位台股證券代號。')
+    value = str(value).strip().upper()
+    if not re.fullmatch(r'(?:[0-9]{4,6}|[0-9]{4,5}[A-Z])', value):
+        raise InputError('請輸入台股證券代號，可包含 ETF 代號末尾的英文字母。')
     return value
 
 
